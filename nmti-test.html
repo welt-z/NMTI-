@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMTI 牛马测试 - 发现你的职场人格</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* 首页样式 */
+        .home-page {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: #888;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 测试页面样式 */
+        .test-page {
+            display: none;
+            padding: 40px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .question-counter {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #eee;
+            padding: 20px 25px;
+            font-size: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            background: #f0f0ff;
+            border-color: #667eea;
+        }
+
+        /* 结果页面样式 */
+        .result-page {
+            display: none;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .result-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .result-name {
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .result-name .en-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-name .cn-name {
+            display: block;
+            font-size: 32px;
+            font-weight: 800;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .result-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.8;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+
+        .result-tips {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .result-tips h4 {
+            color: #e91e63;
+            margin-bottom: 10px;
+        }
+
+        .result-tips p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .restart-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .restart-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .share-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 36px;
+            }
+            .result-name .en-name {
+                font-size: 22px;
+            }
+            .result-name .cn-name {
+                font-size: 26px;
+            }
+            .result-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 首页 -->
+        <div class="home-page" id="homePage">
+            <div class="logo">🐂🐎</div>
+            <h1 class="title">NMTI 牛马测试</h1>
+            <p class="subtitle">发现你的职场人格，认清你的牛马本质</p>
+            
+            <button class="start-btn" onclick="startTest()">开始测试</button>
+        </div>
+
+        <!-- 测试页面 -->
+        <div class="test-page" id="testPage">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter">1 / 10</div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="result-page" id="resultPage">
+            <img class="result-image" id="resultImage" src="" alt="牛马人格">
+            <div class="result-name" id="resultName"></div>
+            <div class="result-description" id="resultDescription"></div>
+            <div class="result-tips" id="resultTips"></div>
+            <button class="restart-btn" onclick="restartTest()">再测一次</button>
+            <p class="share-text">截图分享给朋友，看看谁是你的职场搭子</p>
+        </div>
+    </div>
+
+    <script>
+        // NMTI 测试题目（10题）
+        const questions = [
+            // M/J 维度 - 摸鱼 vs 卷王（3题）
+            {
+                text: "周五下班，老板发了条消息，你会",
+                options: [
+                    { text: "不管！上班我是牛马，下班你应该叫我什么？", type: "M" },
+                    { text: "嘴里骂骂咧咧，手里秒回'收到'", type: "J" }
+                ]
+            },
+            {
+                text: "你每天几点上班",
+                options: [
+                    { text: "12:00至0:00；只要公司不考勤，摸鱼也能拿全勤", type: "M" },
+                    { text: "0:00至10:00；起得比鸡早，睡得比狗晚", type: "J" }
+                ]
+            },
+            {
+                text: "你通常会如何使用AI",
+                options: [
+                    { text: "AI我只用免费的，用不完，根本用不完", type: "M" },
+                    { text: "Token随便烧，会员开起来", type: "J" }
+                ]
+            },
+
+            // S/K 维度 - 社恐 vs 社牛（2题）
+            {
+                text: "公司团建，你最期待的是？",
+                options: [
+                    { text: "紧急工作、天灾人祸，只要不去什么都行", type: "S" },
+                    { text: "全体目光向我看齐，今天Carry全场", type: "K" }
+                ]
+            },
+            {
+                text: "路上遇到同事，你会？",
+                options: [
+                    { text: "抓紧跑路，死腿快动啊！！！", type: "S" },
+                    { text: "主动打招呼'一起去喝点？'", type: "K" }
+                ]
+            },
+
+            // T/P 维度 - 躺平 vs 奋斗（3题）
+            {
+                text: "你的工作信条是",
+                options: [
+                    { text: "把电充绿、把尿喝白、把事办黄", type: "T" },
+                    { text: "只要卷不死，就往死里卷", type: "P" }
+                ]
+            },
+            {
+                text: "你经常用文心做",
+                options: [
+                    { text: "聊天、八卦、选午餐，从此牛马不上班", type: "T" },
+                    { text: "血肉苦弱，赛博飞升，我不做人了老板！", type: "P" }
+                ]
+            },
+            {
+                text: "你理想的工作状态是？",
+                options: [
+                    { text: "钱多事少离家近，最好还能不考勤", type: "T" },
+                    { text: "有挑战有成长，做大做强，再创辉煌", type: "P" }
+                ]
+            },
+
+            // Q/H 维度 - 清醒 vs 糊涂（2题）
+            {
+                text: "抛开薪水不谈，你觉得工作给你带来什么",
+                options: [
+                    { text: "我抛不开", type: "Q" },
+                    { text: "有吃不完的苦", type: "H" }
+                ]
+            },
+            {
+                text: "公司说'我们是一家人'，你觉得？",
+                options: [
+                    { text: "老登！快给我爆金币", type: "Q" },
+                    { text: "公司岁月静好，一定是家人在负重前行", type: "H" }
+                ]
+            }
+        ];
+
+        // 6种牛马人格类型
+        const personalityTypes = {
+            "MS TQ": {
+                enName: "NoBody",
+                cnName: "佛系史莱姆",
+                image: "佛系史莱姆.png",
+                description: "上班没头脑，职场小透明；你离老板心腹还很远，但离成为老板的心腹大患很近了",
+                tips: "你在公司里的地位显而易见，但离战场远一些未必不是好事"
+            },
+            "MS TH": {
+                enName: "DunDunDun",
+                cnName: "办公室水牛",
+                image: "办公室水牛.png",
+                description: "在办公室里主打一个把尿喝白、把事办黄",
+                tips: "蒸蚌！"
+            },
+            "MK TH": {
+                enName: "FAKE-AI",
+                cnName: "能智工人",
+                image: "能智工人.png",
+                description: "比AI便宜还比AI好用，最关键的是能背锅",
+                tips: "慢工出烂活，欲速则一坨；是时候让老板认识到你的价值了"
+            },
+            "MK TQ": {
+                enName: "EAT-er",
+                cnName: "外卖品鉴官",
+                image: "外卖品鉴官.png",
+                description: "工作量基础，食量就不基础，上班就是为了品尝不同的外卖",
+                tips: "事已至此，先干饭吧；爱吃的人运气不会太差"
+            },
+            "JS PH": {
+                enName: "SC-LV",
+                cnName: "生产队的驴",
+                image: "生产队的驴.png",
+                description: "凌晨三点的工作群永远有你的回复，周报调研写得比论文还厚",
+                tips: "只要肯吃苦，就有吃不完的苦；做不完的可以试试文心"
+            },
+            "JK PH": {
+                enName: "IM-KING",
+                cnName: "卷王之王",
+                image: "卷王之王.png",
+                description: "只要我卷的够快够狠，AI就永远追不上我",
+                tips: "天塌下来有老板顶着，适当放松，用文心帮你分担一些"
+            }
+        };
+
+        // 维度组合到人格的映射
+        const typeMapping = {
+            "MS TQ": "MS TQ",  // 佛系史莱姆
+            "MS TH": "MS TH",  // 办公室水牛
+            "MS PQ": "MS TQ",  // 佛系史莱姆
+            "MS PH": "JS PH",  // 生产队的驴
+            "MK TQ": "MK TQ",  // 外卖品鉴官
+            "MK TH": "MK TH",  // 能智工人
+            "MK PQ": "MK TQ",  // 外卖品鉴官
+            "MK PH": "JK PH",  // 卷王之王
+            "JS TQ": "JS PH",  // 生产队的驴
+            "JS TH": "JS PH",  // 生产队的驴
+            "JS PQ": "JS PH",  // 生产队的驴
+            "JS PH": "JS PH",  // 生产队的驴
+            "JK TQ": "JK PH",  // 卷王之王
+            "JK TH": "JK PH",  // 卷王之王
+            "JK PQ": "JK PH",  // 卷王之王
+            "JK PH": "JK PH"   // 卷王之王
+        };
+
+        let currentQuestion = 0;
+        let scores = { M: 0, J: 0, S: 0, K: 0, T: 0, P: 0, Q: 0, H: 0 };
+
+        function startTest() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('testPage').style.display = 'block';
+            currentQuestion = 0;
+            scores = { M: 0, J: 0, S: 0, K: 0, T: 0, P: 0, Q: 0, H: 0 };
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionText').textContent = question.text;
+            document.getElementById('questionCounter').textContent = `${currentQuestion + 1} / ${questions.length}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option.text;
+                btn.onclick = () => selectOption(option.type);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(type) {
+            scores[type]++;
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('testPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+
+            // 计算人格类型
+            const rawType = 
+                (scores.M >= scores.J ? 'M' : 'J') +
+                (scores.S >= scores.K ? 'S' : 'K') +
+                ' ' +
+                (scores.T >= scores.P ? 'T' : 'P') +
+                (scores.Q >= scores.H ? 'Q' : 'H');
+
+            // 映射到对应的人格
+            const mappedType = typeMapping[rawType];
+            const result = personalityTypes[mappedType];
+
+            document.getElementById('resultImage').src = result.image;
+            document.getElementById('resultName').innerHTML = `<span class="en-name">${result.enName}</span><span class="cn-name">${result.cnName}</span>`;
+            document.getElementById('resultDescription').innerHTML = result.description;
+
+            document.getElementById('resultTips').innerHTML = `
+                <h4>💡 职场建议</h4>
+                <p>${result.tips}</p>
+            `;
+        }
+
+        function restartTest() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('homePage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
